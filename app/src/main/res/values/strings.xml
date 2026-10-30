@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Weatherlet</string>
+    <string name="widget_description">Current weather and a 5-day outlook with early alerts for adverse weather.</string>
+    <string name="widget_label_main">Weatherlet</string>
+    <string name="widget_label_alert">Weatherlet · Next alert</string>
+    <string name="widget_label_hourly">Weatherlet · Hourly</string>
+    <string name="alert_widget_description">A small tile showing your next weather alert, or all clear.</string>
+    <string name="hourly_widget_description">The next few hours: temperature, conditions and chance of rain.</string>
+    <string name="tile_label">Weather</string>
+</resources>

@@ -1,0 +1,12 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+keystore.properties
+*.jks
+
+# secrets and local files
+weatherlet-release.jks
+keystore.properties
+*.apk
