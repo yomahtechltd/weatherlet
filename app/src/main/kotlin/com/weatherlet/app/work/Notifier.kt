@@ -42,7 +42,7 @@ object Notifier {
     private const val AMBER = 0xFFE08A00.toInt()
 
     private fun canPost(ctx: Context) =
-        ctx.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        com.weatherlet.app.data.Perms.canNotify(ctx)
 
     /** Quiet hours suppress *instant* notifications (changes, corrections, nudges); the in-app card still shows them. */
     private fun quietNow(store: Store): Boolean =
@@ -67,11 +67,13 @@ object Notifier {
         )
     }
 
+    @android.annotation.SuppressLint("MissingPermission") // canPost() is checked first
     private fun post(
         ctx: Context, id: Int, channel: String, title: String, text: String,
         bigText: String = text, color: Int = AMBER, note: String? = null,
         kind: String = "alert", record: Boolean = true,
     ) {
+        if (!canPost(ctx)) return
         ensureChannels(ctx)
         val open = PendingIntent.getActivity(
             ctx, 0, Intent(ctx, MainActivity::class.java),

@@ -2,8 +2,5 @@
     <style name="Theme.Weatherlet" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowSplashScreenBackground">@color/splash_bg</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash_animated</item>
-        <item name="android:windowSplashScreenAnimationDuration">900</item>
     </style>
 </resources>

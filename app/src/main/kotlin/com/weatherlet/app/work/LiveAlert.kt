@@ -54,7 +54,7 @@ object LiveAlert {
         val nm = ctx.getSystemService(NotificationManager::class.java) ?: return
         val store = Store(ctx)
         val allowed = Build.VERSION.SDK_INT >= 36 && store.liveUpdates && store.alertsEnabled &&
-            ctx.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+            com.weatherlet.app.data.Perms.canNotify(ctx)
         val place = store.place
         val f = if (allowed && place != null) store.cached(place) else null
         if (f == null) {
@@ -77,7 +77,7 @@ object LiveAlert {
             ?: "🏛️ ${official.first().title} · ${place.title}"
         val text = first?.let { AlertEngine.detail(it, store.units) } ?: official.first().detail.ifBlank { official.first().source }
         val chip = first?.let { chip(it, store.units) } ?: "Alert"
-        post(ctx, nm, title, text, chip)
+        if (Build.VERSION.SDK_INT >= 36) post(ctx, nm, title, text, chip)
     }
 
     @RequiresApi(36)

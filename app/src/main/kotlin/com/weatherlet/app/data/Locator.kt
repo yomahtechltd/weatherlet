@@ -25,9 +25,12 @@ object Locator {
     fun hasPermission(ctx: Context) =
         ctx.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
+    val hasSeparateBackground: Boolean get() = android.os.Build.VERSION.SDK_INT >= 29
+
     fun hasBackgroundPermission(ctx: Context) =
         hasPermission(ctx) &&
-            ctx.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+            (!hasSeparateBackground ||
+                ctx.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED)
 
     /** Null if there's no permission, location is off, or no fix arrived in time. */
     suspend fun locate(ctx: Context): Place? {
@@ -46,7 +49,9 @@ object Locator {
                 val cancel = CancellationSignal()
                 cont.invokeOnCancellation { cancel.cancel() }
                 try {
-                    lm.getCurrentLocation(provider, cancel, ctx.mainExecutor) { cont.resume(it) }
+                    androidx.core.location.LocationManagerCompat.getCurrentLocation(
+                        lm, provider, cancel, androidx.core.content.ContextCompat.getMainExecutor(ctx),
+                    ) { cont.resume(it) }
                 } catch (e: SecurityException) {
                     cont.resume(null)
                 }

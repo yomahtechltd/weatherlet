@@ -78,7 +78,7 @@ class FeatureTest {
     @Test fun commuteFlagsIceAfterWetNight() {
         val hours = (3..20).map { hour(it, temp = -1.0, rain = if (it == 4) 0.5 else 0.0) }
         val leg = CommuteAdvisor.leg("Morning", d0.atTime(7, 30), hours, Units.METRIC)
-        assertTrue(leg.issues.any { it.emoji == "🧊" })
+        assertTrue(leg.issues.any { it.emoji == com.weatherlet.app.alerts.Emoji.ice })
     }
 
     @Test fun upcomingSkipsWeekends() {

@@ -12,12 +12,12 @@ enum class Severity { WARNING, SEVERE }
 
 enum class AlertType(val title: String, val emoji: String, val tip: String) {
     SNOW("Snow", "❄️", "Allow extra travel time, check the car, and keep a shovel or grit handy."),
-    COLD("Extreme cold", "🥶", "Protect pipes, check on vulnerable neighbours, wrap up warm and bring pets in."),
-    ICE("Black ice & frost", "🧊", "Surfaces will freeze overnight. Leave extra time, walk and drive gently, and de-ice before you set off."),
+    COLD("Extreme cold", Emoji.cold, "Protect pipes, check on vulnerable neighbours, wrap up warm and bring pets in."),
+    ICE("Black ice & frost", Emoji.ice, "Surfaces will freeze overnight. Leave extra time, walk and drive gently, and de-ice before you set off."),
     RAIN("Heavy rain", "🌧️", "Clear drains and gutters, avoid flood-prone routes, lift valuables off the floor."),
     FLOOD("Flood risk", "🌊", "Ground is already soaked. Avoid low-lying roads and underpasses, and move valuables upstairs."),
     WIND("High winds", "💨", "Secure garden furniture and bins, expect travel disruption, avoid parking under trees."),
-    HEAT("Heat", "🥵", "Stay hydrated, plan outdoor activity for mornings, keep your home cool, check on others."),
+    HEAT("Heat", Emoji.hot, "Stay hydrated, plan outdoor activity for mornings, keep your home cool, check on others."),
     SWING("Temperature swing", "🌡️", "A sharp change in a day. Dress in layers, protect plants and pipes, and take care if you're heat- or cold-sensitive."),
     STORM("Thunderstorm", "⛈️", "Unplug sensitive electronics, avoid open areas and delay outdoor plans."),
     FOG("Dense fog", "🌫️", "Visibility will be poor. Allow extra time, use dipped headlights and keep your distance."),

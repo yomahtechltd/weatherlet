@@ -14,7 +14,7 @@ An Android weather-alert app and widgets that watch the next 5 days and warn you
 - No accounts, analytics or ads. Data stays on the device.
 
 ## Build
-Kotlin, Jetpack Compose (Material 3), Jetpack Glance, WorkManager. Min SDK 31, target SDK 36, JDK 17.
+Kotlin, Jetpack Compose (Material 3), Jetpack Glance, WorkManager. Min SDK 26 (Android 8.0), target SDK 36, JDK 17.
 
 ```
 ./gradlew testDebugUnitTest      # unit tests

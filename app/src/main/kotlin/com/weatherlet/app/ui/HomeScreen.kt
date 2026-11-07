@@ -460,7 +460,7 @@ private fun DayRow(
 @Composable
 private fun DayDetails(d: DayForecast, units: Units) {
     val items = buildList {
-        add("🥶 Feels as low as ${units.temp(d.feelsMin)}")
+        add("${com.weatherlet.app.alerts.Emoji.cold} Feels as low as ${units.temp(d.feelsMin)}")
         add("💨 Wind ${units.wind(d.windKmh)}, gusts ${units.wind(d.gustKmh)}")
         if (d.precipMm >= 0.1) add("🌧️ ${units.rain(d.precipMm)} of rain or melt")
         if (d.snowCm >= 0.1) add("❄️ ${units.snow(d.snowCm)} of snow")

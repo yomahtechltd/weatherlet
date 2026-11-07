@@ -1,6 +1,9 @@
 package com.weatherlet.app.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -340,10 +343,10 @@ private fun TimeStepper(label: String, minutes: Int, onChange: (Int) -> Unit) {
 @Composable
 private fun BackgroundCard(r: com.weatherlet.app.alerts.BackgroundReport) {
     val ctx = androidx.compose.ui.platform.LocalContext.current
-    fun dot(l: com.weatherlet.app.alerts.Health) = when (l) {
-        com.weatherlet.app.alerts.Health.GOOD -> "🟢"
-        com.weatherlet.app.alerts.Health.WARN -> "🟠"
-        com.weatherlet.app.alerts.Health.BAD -> "🔴"
+    fun dotColor(l: com.weatherlet.app.alerts.Health) = when (l) {
+        com.weatherlet.app.alerts.Health.GOOD -> androidx.compose.ui.graphics.Color(0xFF2E9E5B)
+        com.weatherlet.app.alerts.Health.WARN -> androidx.compose.ui.graphics.Color(0xFFE08A00)
+        com.weatherlet.app.alerts.Health.BAD -> androidx.compose.ui.graphics.Color(0xFFD93025)
     }
     Spacer(Modifier.height(8.dp))
     androidx.compose.material3.Surface(shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surfaceContainerHigh) {
@@ -354,9 +357,15 @@ private fun BackgroundCard(r: com.weatherlet.app.alerts.BackgroundReport) {
             )
             r.lines.forEach { l ->
                 Column(Modifier.fillMaxWidth()) {
-                    Text("${dot(l.level)}  ${l.label}", style = MaterialTheme.typography.bodyMedium)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        androidx.compose.foundation.layout.Box(
+                            Modifier.padding(end = 10.dp).size(12.dp).clip(androidx.compose.foundation.shape.CircleShape)
+                                .background(dotColor(l.level)),
+                        )
+                        Text(l.label, style = MaterialTheme.typography.bodyMedium)
+                    }
                     Text(
-                        l.value, Modifier.padding(start = 28.dp),
+                        l.value, Modifier.padding(start = 22.dp),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }

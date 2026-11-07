@@ -99,9 +99,9 @@ class WeatherViewModel(private val app: Application) : AndroidViewModel(app) {
 
     private fun backgroundReport(): BackgroundReport {
         val pm = app.getSystemService(android.os.PowerManager::class.java)
-        val bucket = runCatching {
+        val bucket = if (android.os.Build.VERSION.SDK_INT >= 28) runCatching {
             app.getSystemService(android.app.usage.UsageStatsManager::class.java).appStandbyBucket
-        }.getOrDefault(-1)
+        }.getOrDefault(-1) else -1
         return BackgroundHealth.report(
             now = System.currentTimeMillis(), lastSyncAt = store.lastSyncAt,
             dailyDelayMin = store.lastDailyDelayMin, dailyRunAt = store.lastDailyRunAt,

@@ -16,10 +16,10 @@ android {
 
     defaultConfig {
         applicationId = "com.weatherlet.app"
-        minSdk = 31
+        minSdk = 26
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.2.1"
+        versionCode = 7
+        versionName = "1.2.3"
         // Lets a release build be installed beside the real app for testing: -PappIdSuffix=.rtest
         (project.findProperty("appIdSuffix") as String?)?.let { applicationIdSuffix = it }
     }

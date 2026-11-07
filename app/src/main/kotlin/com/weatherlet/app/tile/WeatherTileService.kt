@@ -51,16 +51,17 @@ class WeatherTileService : TileService() {
             tile.icon = Icon.createWithResource(ctx, R.drawable.ic_stat_weather)
             if (f == null) {
                 tile.label = "Weatherlet"
-                tile.subtitle = "Tap to choose a city"
+                if (Build.VERSION.SDK_INT >= 29) tile.subtitle = "Tap to choose a city"
                 tile.state = Tile.STATE_INACTIVE
             } else {
                 val alerts = AlertEngine.evaluate(f.days, f.past, store.profiles, store.sensitivity)
                 val first = alerts.firstOrNull()
                 tile.label = "${store.units.temp(f.current.temp)} ${f.place.title.substringBefore(" and ").take(9).trim()}"
-                tile.subtitle = first?.let {
+                val sub = first?.let {
                     "${it.type.emoji} ${it.type.title} · ${AlertEngine.range(it, f.days.first().date)}" +
                         if (alerts.size > 1) " +${alerts.size - 1}" else ""
                 } ?: "No alerts · ${Wmo.describe(f.current.code)}"
+                if (Build.VERSION.SDK_INT >= 29) tile.subtitle = sub
                 tile.state = if (first != null) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
             }
             tile.updateTile()

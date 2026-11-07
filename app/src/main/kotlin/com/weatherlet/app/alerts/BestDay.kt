@@ -10,7 +10,7 @@ enum class Activity(val label: String, val emoji: String) {
     LAUNDRY("Washing", "👕"),
     DRIVE("Drive", "🚗"),
     GARDEN("Garden", "🌱"),
-    OUTDOORS("BBQ", "🧺"),
+    OUTDOORS("BBQ", Emoji.basket),
 }
 
 data class DayScore(val day: DayForecast, val score: Int)

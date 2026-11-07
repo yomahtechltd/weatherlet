@@ -55,7 +55,7 @@ object CommuteAdvisor {
         }
         val coldest = window.minBy { it.temp }
         if (coldest.temp <= 1.0 && (wetBefore || window.any { it.precipMm > 0 || it.code in setOf(56, 57, 66, 67) })) {
-            issues += CommuteIssue("🧊", "Icy surfaces likely (${units.temp(coldest.temp)}) — go slowly", Severity.WARNING)
+            issues += CommuteIssue(Emoji.ice, "Icy surfaces likely (${units.temp(coldest.temp)}) — go slowly", Severity.WARNING)
         }
         val gust = worstHour { it.gustKmh }
         when {
@@ -69,7 +69,7 @@ object CommuteAdvisor {
         }
         if (window.any { it.code >= 95 }) issues += CommuteIssue("⛈️", "Thunderstorm during your trip", Severity.SEVERE)
         val hot = window.maxBy { it.temp }
-        if (hot.temp >= 32) issues += CommuteIssue("🥵", "Hot trip (${units.temp(hot.temp)}) — carry water", Severity.WARNING)
+        if (hot.temp >= 32) issues += CommuteIssue(Emoji.hot, "Hot trip (${units.temp(hot.temp)}) — carry water", Severity.WARNING)
 
         val first = window.first()
         return CommuteLeg(label, at, first.temp, first.code, issues.sortedByDescending { it.severity })

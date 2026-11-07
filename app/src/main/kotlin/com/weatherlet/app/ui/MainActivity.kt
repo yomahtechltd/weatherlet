@@ -82,7 +82,9 @@ private fun App(vm: WeatherViewModel, target: String?, onTargetHandled: () -> Un
         }
     }
     val askForeground = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (granted) askBackground.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION) else vm.locationDenied()
+        if (!granted) vm.locationDenied()
+        else if (!Locator.hasSeparateBackground) vm.setAutoLocation(true)
+        else askBackground.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
     }
     val onAutoLocation = { on: Boolean ->
         when {
@@ -97,7 +99,7 @@ private fun App(vm: WeatherViewModel, target: String?, onTargetHandled: () -> Un
         else askLocation.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
     LaunchedEffect(home.place) {
-        if (home.place != null) askNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+        if (home.place != null && com.weatherlet.app.data.Perms.needsNotificationPrompt) askNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 
     val firstRun = home.place == null
@@ -105,9 +107,7 @@ private fun App(vm: WeatherViewModel, target: String?, onTargetHandled: () -> Un
     BackHandler(enabled = infoPage != null) { infoPage = null }
     BackHandler(enabled = showHistory && infoPage == null) { showHistory = false }
 
-    val notificationsOn = androidx.core.content.ContextCompat.checkSelfPermission(
-        ctx, Manifest.permission.POST_NOTIFICATIONS,
-    ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+    val notificationsOn = com.weatherlet.app.data.Perms.canNotify(ctx)
     var notifGranted by rememberSaveable { mutableStateOf(notificationsOn) }
     val askNotificationsIntro = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { notifGranted = it }
 
@@ -117,7 +117,14 @@ private fun App(vm: WeatherViewModel, target: String?, onTargetHandled: () -> Un
             profiles = home.profiles,
             notificationsAllowed = notifGranted,
             onToggleProfile = vm::toggleProfile,
-            onAllowNotifications = { askNotificationsIntro.launch(Manifest.permission.POST_NOTIFICATIONS) },
+            onAllowNotifications = {
+                if (com.weatherlet.app.data.Perms.needsNotificationPrompt) askNotificationsIntro.launch(Manifest.permission.POST_NOTIFICATIONS)
+                else ctx.startActivity(
+                    android.content.Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, ctx.packageName)
+                        .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+            },
             onBatterySettings = {
                 ctx.startActivity(
                     android.content.Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
